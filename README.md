@@ -8,10 +8,12 @@ A CI-ready automation framework covering UI and API test automation.
 | API | [Restful-Booker](https://restful-booker.herokuapp.com), booking CRUD and auth | Java 17, REST Assured, TestNG, Maven | Allure and Surefire |
 
 **At a glance**
-- **UI:** 29 test cases, with a separate login setup project for session reuse.
+
+- **UI:** 29 functional test cases, with a separate login setup project for session reuse.
 - **API:** 55 tests in the blocking suite plus 19 known-defect tests. TestNG counts each data-provider row as a test.
 - **Defects:** 11 application defects found and documented in [docs/known-issues.md](docs/known-issues.md). The tests expose them; they do not work around them.
-- **Coverage:** every PDF requirement is mapped to a test in [docs/coverage-matrix.md](docs/coverage-matrix.md).
+- **Coverage:** every assignment requirement is mapped to a test in [docs/coverage-matrix.md](docs/coverage-matrix.md).
+- **Evidence:** console output, report screenshots and real run results are available under [docs/sample-outputs/](docs/sample-outputs/).
 
 ---
 
@@ -34,7 +36,7 @@ A CI-ready automation framework covering UI and API test automation.
 
 ## Repository layout
 
-```
+```text
 qa-automation-framework/
 ├── README.md
 ├── .gitignore
@@ -43,7 +45,7 @@ qa-automation-framework/
 │   ├── test-strategy.md            # scope, risks, techniques, defect handling
 │   ├── coverage-matrix.md          # requirement → test ID → automation → expected result
 │   ├── known-issues.md             # application defects with evidence
-│   └── sample-outputs/             # console logs and report screenshots from a real run
+│   └── sample-outputs/             # console logs, report screenshots and real run results
 ├── ui-automation/
 │   ├── playwright.config.ts
 │   ├── .env.example
@@ -106,7 +108,7 @@ cp .env.example .env
 # API
 cd ../api-automation
 cp .env.example .env
-
+# Set API_USERNAME and API_PASSWORD in .env for local execution (see Configuration)
 mvn -q -DskipTests dependency:resolve    # optional: pre-download dependencies
 ```
 
@@ -114,7 +116,11 @@ On Windows PowerShell, use `Copy-Item .env.example .env` instead of `cp`.
 
 ### Configuration
 
-Nothing environment-specific is hard-coded. The UI `.env` files are git-ignored. The committed `ui-automation/.env.example` file contain only the SauceDemo demo credentials published by SauceDemo and Restful-Booker. API configuration uses the environment/property precedence described below.
+No environment-specific secrets are hard-coded, and the `.env` files are git-ignored.
+
+- `ui-automation/.env.example` contains the public SauceDemo demo configuration required for local UI execution.
+- `api-automation/.env.example` is a template. For local API execution, copy it to `.env` and set `API_USERNAME` and `API_PASSWORD` to the demo admin account published in the [Restful-Booker API documentation](https://restful-booker.herokuapp.com/apidoc/index.html).
+- In CI, the API credentials are supplied through the repository secrets `API_USERNAME` and `API_PASSWORD`, so no API password is stored in the repository.
 
 **UI** (`ui-automation/src/config/env.ts`). Real environment variables override `.env`. Missing or invalid values fail fast with a clear message.
 
@@ -124,11 +130,12 @@ Nothing environment-specific is hard-coded. The UI `.env` files are git-ignored.
 | `STANDARD_USER`, `LOCKED_OUT_USER`, `USER_PASSWORD` | Test accounts | required |
 | `ENV_FILE` | Load another file, e.g. `.env.staging` | `.env` |
 | `BROWSERS` | `chromium`, `firefox` and/or `webkit` (comma-separated) | `chromium` |
-| `TEST_TIMEOUT_MS`, `EXPECT_TIMEOUT_MS`, `ACTION_TIMEOUT_MS`, `NAVIGATION_TIMEOUT_MS` | Timeouts | 30000 / 5000 / 10000 / 15000 |
+| `TEST_TIMEOUT_MS`, `EXPECT_TIMEOUT_MS`, `ACTION_TIMEOUT_MS`, `NAVIGATION_TIMEOUT_MS` | Timeouts | `30000 / 5000 / 10000 / 15000` |
 | `LOG_LEVEL` | `debug`, `info`, `warn` or `error` | `info` |
 | `FAKER_SEED` | Reproducible customer data | random |
 
 **API** (`ConfigManager`). Precedence, highest first:
+
 1. JVM system property (`-Dapi.base.uri=…`).
 2. Environment variable (`API_BASE_URI`).
 3. `.env`.
@@ -139,7 +146,7 @@ Select the environment with `-Denv=<name>` or `API_ENV` (default `qa`). To add a
 | Property / variable | Purpose |
 |---|---|
 | `api.base.uri` / `API_BASE_URI` | API base URL |
-| `api.username`, `api.password` / `API_USERNAME`, `API_PASSWORD` | Admin credentials (never in properties files) |
+| `api.username`, `api.password` / `API_USERNAME`, `API_PASSWORD` | Admin credentials |
 | `api.connect.timeout.ms`, `api.read.timeout.ms` | HTTP timeouts |
 | `api.healthcheck.enabled` | Fail-fast `/ping` before the suite |
 | `-Dthread.count` | Parallel threads (default 4) |
@@ -192,13 +199,23 @@ Select the environment with `-Denv=<name>` or `API_ENV` (default `qa`). To add a
 | Screenshot, video and trace of failed tests | `ui-automation/test-results/<test>/` | Linked from the HTML report |
 | JUnit XML (for CI dashboards) | `ui-automation/test-results/junit.xml` | Any JUnit viewer |
 
-Screenshots are captured on failure; video and trace are kept on failure locally. In CI, the trace is recorded on the first retry. Open a trace with `npx playwright show-trace test-results/<test>/trace.zip` to see every action, DOM snapshot, network call and console message. The E2E test is split into named `test.step()` blocks that mirror the assignment's steps, so the report shows exactly which business step failed.
+Screenshots are captured on failure; video and trace are kept on failure locally. In CI, the trace is recorded on the first retry.
+
+Open a trace with:
+
+```bash
+npx playwright show-trace test-results/<test>/trace.zip
+```
+
+The E2E purchase-flow test is split into named `test.step()` blocks that mirror the assignment steps, so the report shows exactly which business step failed.
+
+The repository also contains captured UI evidence under `docs/sample-outputs/`, including the console output and screenshots for the HTML report, E2E test steps and known-defect test.
 
 ### API
 
 | Artifact | Location | How to open |
 |---|---|---|
-| Allure results | `api-automation/target/allure-results/` | `mvn allure:serve` (opens a browser) |
+| Allure results | `api-automation/target/allure-results/` | `mvn allure:serve` |
 | Static Allure report | `api-automation/target/site/allure-maven-plugin/` | `mvn allure:report`, then open `index.html` |
 | Surefire/TestNG reports | `api-automation/target/surefire-reports/` | `emailable-report.html` |
 | Full HTTP log | `api-automation/target/logs/api-tests.log` | Text editor |
@@ -206,20 +223,23 @@ Screenshots are captured on failure; video and trace are kept on failure locally
 Every API test in Allure carries the full request and response as attachments. The log file contains a DEBUG record of every exchange, and each line is tagged with the test that issued it, so parallel runs stay readable.
 
 Credentials never reach reports or logs:
+
 - `Authorization` and `Cookie` headers (Basic auth and the token cookie) are masked in Allure attachments and in all logs.
-- `POST /auth` exchanges are deliberately not attached to Allure, because their bodies carry the password and the issued token. They are still logged, with `password` and `token` values redacted.
+- `POST /auth` exchanges are deliberately not attached to Allure because their bodies carry the password and issued token. They are still logged, with `password` and `token` values redacted.
 
 ### Diagnosing a failure
 
-1. **UI:** open the HTML report and go to the failed step. Its custom assertion message says what was expected, for example "item total should equal the sum of line prices". Then check the screenshot, and open the trace for the DOM and network at the moment of failure. Re-run locally with `--headed` or `--debug`.
+1. **UI:** open the HTML report and go to the failed step. Its custom assertion message says what was expected, for example `"item total should equal the sum of line prices"`. Then check the screenshot, and open the trace for the DOM and network at the moment of failure. Re-run locally with `--headed` or `--debug`.
+
 2. **API:** the AssertJ message includes the response body. The Allure attachment shows the exact request. `target/logs/api-tests.log` shows the timeline for that test. Re-run one method with `-Dtest=Class#method -Dthread.count=1`.
-3. **Triage:** is it an application defect, a test defect or an environment issue? Environment outages surface as a health-check failure (API) or navigation timeouts (UI). A real defect gets added to `docs/known-issues.md`.
+
+3. **Triage:** determine whether the problem is an application defect, test defect or environment issue. Environment outages surface as a health-check failure (API) or navigation timeouts (UI). A confirmed application defect is added to `docs/known-issues.md`.
 
 ## Architecture
 
 ### UI framework
 
-```
+```text
 spec file ──uses──▶ fixtures/test.ts ──creates──▶ Page objects ──compose──▶ Components
     │                     │                          │
     └── test-data ◀───────┘                          └── utils/price (parse "$29.99" → 2999 cents)
@@ -234,7 +254,7 @@ spec file ──uses──▶ fixtures/test.ts ──creates──▶ Page objec
 
 ### API framework
 
-```
+```text
 Test class ──extends──▶ BaseApiTest (health check, auth helpers, cleanup)
     │
     ├── BookingDataFactory ──▶ model records (Booking, BookingDates, …)
@@ -242,8 +262,8 @@ Test class ──extends──▶ BaseApiTest (health check, auth helpers, clean
     └── BookingClient / AuthClient / HealthClient
             └── RequestSpecFactory (base URI, media types, timeouts,
                                     AllureRestAssured + Slf4jLoggingFilter)
-    then: ResponseSpecFactory (status, content type, JSON schema)
-          + AssertJ (recursive POJO comparison, field checks)
+          then: ResponseSpecFactory (status, content type, JSON schema)
+                + AssertJ (recursive POJO comparison, field checks)
 ```
 
 - **Clients never assert.** They return the raw `Response`, so the same `update(id, payload, auth)` serves the happy path, the 403 matrix and the validation tests.
@@ -271,19 +291,28 @@ Full mapping: [docs/coverage-matrix.md](docs/coverage-matrix.md). Strategy and r
 | Job | Steps | Blocking |
 |---|---|---|
 | `ui-tests` | checkout, set up Node 22 (npm cache), `npm ci`, lint, type-check, install Chromium with OS dependencies, run tests, upload HTML report and failure evidence | Yes |
-| `api-tests` | checkout, set up Java 17 (Maven cache), `mvn clean test`, generate Allure report, upload Allure, Surefire reports and logs | Yes |
-| `api-known-defects` | runs `mvn test -Pknown-defects` and uploads its reports | No (`continue-on-error`) |
+| `api-tests` | checkout, set up Java 17 (Maven cache), provide `API_USERNAME` and `API_PASSWORD` from GitHub repository secrets, run `mvn clean test`, generate Allure report, upload Allure, Surefire reports and logs | Yes |
+| `api-known-defects` | provide `API_USERNAME` and `API_PASSWORD` from GitHub repository secrets, run `mvn test -Pknown-defects` and upload its reports | No (`continue-on-error`) |
 
-Artifacts are uploaded even when tests fail (`if: !cancelled()`), so failure evidence is always available. In CI, Playwright forbids a stray `test.only`, uses 2 workers and retries a failed test once (reported as flaky).
+Artifacts are uploaded even when tests fail (`if: !cancelled()`), so failure evidence is always available.
+
+In CI, Playwright:
+
+- forbids a stray `test.only`
+- uses 2 workers
+- retries a failed test once
+- records the trace on the first retry
+
+The known-defect API job is intentionally non-blocking because its tests are expected to fail while reproducing documented application defects.
 
 ## Design decisions
 
 | Decision | Reason |
 |---|---|
-| **SauceDemo** for UI | Stable, fast, has `data-test` attributes, and covers the full mandatory flow. It has no search box, so "search/select a product" is implemented as selecting by name (plus sorting tests). |
-| **Restful-Booker** for API | Real persistence for PUT/PATCH/DELETE, real token and Basic auth, and an open-source implementation, which allowed defects to be confirmed in code. |
+| **SauceDemo for UI** | Stable, fast, has `data-test` attributes, and covers the full mandatory flow. It has no search box, so "search/select a product" is implemented as selecting by name (plus sorting tests). |
+| **Restful-Booker for API** | Real persistence for PUT/PATCH/DELETE, real token and Basic auth, and an open-source implementation, which allowed defects to be confirmed in code. |
 | **TestNG** | Groups, data providers and method-level parallelism are built in; it is common in Java QA stacks. |
-| **Allure** for API reports | Shows each request and response next to the test. Playwright's own HTML report already covers the UI side, so no extra reporter is added there. |
+| **Allure for API reports** | Shows each request and response next to the test. Playwright's own HTML report already covers the UI side, so no extra reporter is added there. |
 | **`data-test` locators** | Purpose-built for testing; stable across styling changes. ARIA roles are used for buttons, which also reflects accessibility. |
 | **No hard waits** | Playwright auto-waiting and web-first assertions remove the main cause of flaky UI tests. |
 | **Prices compared in cents** | Avoids floating-point errors (for example `0.1 + 0.2 ≠ 0.3`) when checking totals. |
@@ -291,28 +320,31 @@ Artifacts are uploaded even when tests fail (`if: !cancelled()`), so failure evi
 | **Session saved once** (`storageState`) | Tests not about login are faster and are not broken by an unrelated login failure. |
 | **Framework code in `src/main/java`** | Separates the reusable client/spec/model layer from tests. For this reason the test libraries are compile scope. |
 | **Literal `application/json` Accept** | REST Assured's `ContentType.JSON` sends four comma-separated types; Restful-Booker matches Accept literally and would return 418. |
-| **No custom retry of API assertions** | The PDF recommends "retry handling where appropriate". Retrying assertions can hide real defects, so it is not used. Availability is handled by a fail-fast `/ping` health check. The UI uses Playwright's built-in CI retry, and those retries are visible as flaky. |
-| **Defects asserted, not worked around** | Tests describe correct behaviour. Defects are kept visible through `test.fail()` (UI) and a separate group (API), so the main build stays a trustworthy signal. |
+| **No custom retry of API assertions** | The assignment recommends retry handling where appropriate. Retrying assertions can hide real defects, so it is not used. Availability is handled by a fail-fast `/ping` health check. The UI uses Playwright's built-in CI retry, and those retries are visible as flaky. |
+| **Defects asserted, not worked around** | Tests describe correct behaviour. Defects are kept visible through `test.fail()` (UI) and a separate group (API), while the main build stays a trustworthy signal. |
 | **Single source of truth for Maven execution** | No `testng.xml`: groups, parallelism and exclusions live in the Surefire configuration, so `-Dgroups` and `-Dtest` work without editing files. |
 
 ## Assumptions
 
 - The public demo sites are the systems under test, so their documented quirks are asserted as documented. Examples are DELETE returning 201 and `/ping` returning 201; see [docs/known-issues.md](docs/known-issues.md) › Observations.
 - Restful-Booker is shared and may be reset by its host. Tests therefore create and clean up their own data and never rely on existing ids.
-- SauceDemo's intentionally faulty accounts (`problem_user`, `error_user`, and so on) are out of scope. See test-strategy.md.
-- The SauceDemo demo credentials in ui-automation/.env.example are public. Real credentials would be supplied through CI secrets, which override .env without code changes.
+- SauceDemo's intentionally faulty accounts (`problem_user`, `error_user`, and so on) are out of scope. See [docs/test-strategy.md](docs/test-strategy.md).
+- The SauceDemo demo configuration in `ui-automation/.env.example` is public. Real credentials would be supplied through CI secrets, which override `.env` without code changes.
+- API credentials are not committed to the repository. Local execution uses a developer-managed `.env`; CI uses GitHub repository secrets.
 
 ## Known issues
 
-Eleven application defects were found: 2 in SauceDemo and 9 in Restful-Booker. Examples include checkout with an empty cart, field types not validated, decimal prices truncated, and a rejected request still storing data. All are listed with steps, expected and actual behaviour, severity and the exposing test in [docs/known-issues.md](docs/known-issues.md).
+Eleven application defects were found: 2 in SauceDemo and 9 in Restful-Booker. Examples include checkout with an empty cart, field types not validated, decimal prices truncated, and a rejected request still storing data.
+
+All are listed with steps, expected and actual behaviour, severity and the exposing test in [docs/known-issues.md](docs/known-issues.md).
 
 ## Limitations and next steps
 
 - **Live data.** The public environments are outside our control, so occasional outages cause failures that are not product defects. The API health check makes these obvious.
+
 - **Possible extensions:**
   - API contract checks for XML responses.
   - Visual comparison and accessibility scans (axe) in the UI suite.
   - Test data seeding against a private environment.
   - Publishing reports to GitHub Pages.
   - Running the UI matrix across browsers in parallel CI jobs.
-
