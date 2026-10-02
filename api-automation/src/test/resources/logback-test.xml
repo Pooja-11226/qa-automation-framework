@@ -1,0 +1,29 @@
+<configuration>
+    <!-- Console: concise INFO summary. File: full DEBUG exchange for post-mortem analysis (CI artifact). -->
+    <property name="LOG_DIR" value="${LOG_DIR:-target/logs}"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${CONSOLE_LOG_LEVEL:-INFO}</level>
+        </filter>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] [%X{test:-}] %logger{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/api-tests.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%d{ISO8601} %-5level [%thread] [%X{test:-}] %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.sdet.api" level="DEBUG"/>
+    <logger name="org.apache.http" level="WARN"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

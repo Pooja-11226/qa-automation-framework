@@ -1,0 +1,100 @@
+
+Running 30 tests using 6 workers
+
+2026-10-02T11:00:46.105Z [INFO] START auth.setup.ts > authenticate as the standard user {"project":"setup"}
+2026-10-02T11:00:52.601Z [INFO] END   authenticate as the standard user: passed (as expected) in 6496 ms
+  ✓   1 [setup] › tests/auth.setup.ts:10:6 › authenticate as the standard user (6.2s)
+2026-10-02T11:00:53.010Z [INFO] START auth/login.spec.ts > Login > login is rejected for a locked-out account {"project":"chromium"}
+2026-10-02T11:00:53.016Z [INFO] START auth/login.spec.ts > Login > login is rejected for a username in the wrong case {"project":"chromium"}
+2026-10-02T11:00:53.018Z [INFO] START auth/login.spec.ts > Login > login is rejected for an unknown username {"project":"chromium"}
+2026-10-02T11:00:53.021Z [INFO] START auth/login.spec.ts > Login > login is rejected for an empty username {"project":"chromium"}
+2026-10-02T11:00:53.024Z [INFO] START auth/login.spec.ts > Login > a valid user can log in and lands on the inventory page {"project":"chromium"}
+2026-10-02T11:00:53.030Z [INFO] START auth/login.spec.ts > Login > login is rejected for a wrong password {"project":"chromium"}
+2026-10-02T11:00:54.540Z [INFO] END   login is rejected for an empty username: passed (as expected) in 1519 ms
+  ✓   3 [chromium] › tests/auth/login.spec.ts:63:9 › Login › login is rejected for an empty username @regression @negative (1.3s)
+2026-10-02T11:00:54.552Z [INFO] START auth/login.spec.ts > Login > login is rejected for an empty password {"project":"chromium"}
+2026-10-02T11:00:54.670Z [INFO] END   login is rejected for a wrong password: passed (as expected) in 1640 ms
+  ✓   7 [chromium] › tests/auth/login.spec.ts:63:9 › Login › login is rejected for a wrong password @regression @negative (1.4s)
+2026-10-02T11:00:54.677Z [INFO] START auth/login.spec.ts > Login > the login error message can be dismissed {"project":"chromium"}
+2026-10-02T11:00:54.699Z [INFO] END   login is rejected for a locked-out account: passed (as expected) in 1689 ms
+  ✓   2 [chromium] › tests/auth/login.spec.ts:63:9 › Login › login is rejected for a locked-out account @regression @negative (1.5s)
+2026-10-02T11:00:54.711Z [INFO] START auth/login.spec.ts > Login > an anonymous user is redirected from a protected page to login {"project":"chromium"}
+2026-10-02T11:00:54.713Z [INFO] END   a valid user can log in and lands on the inventory page: passed (as expected) in 1689 ms
+2026-10-02T11:00:54.714Z [INFO] END   login is rejected for a username in the wrong case: passed (as expected) in 1698 ms
+  ✓   4 [chromium] › tests/auth/login.spec.ts:63:9 › Login › login is rejected for a username in the wrong case @regression @negative (1.5s)
+  ✓   5 [chromium] › tests/auth/login.spec.ts:50:7 › Login › a valid user can log in and lands on the inventory page @regression @smoke (1.5s)
+2026-10-02T11:00:54.726Z [INFO] START auth/login.spec.ts > Login > logging out ends the session {"project":"chromium"}
+2026-10-02T11:00:54.734Z [INFO] START cart/cart.spec.ts > Shopping cart > adding a product updates the badge and the cart shows its details {"project":"chromium"}
+2026-10-02T11:00:54.746Z [INFO] END   login is rejected for an unknown username: passed (as expected) in 1728 ms
+  ✓   6 [chromium] › tests/auth/login.spec.ts:63:9 › Login › login is rejected for an unknown username @regression @negative (1.5s)
+2026-10-02T11:00:54.758Z [INFO] START cart/cart.spec.ts > Shopping cart > removing products keeps the badge and cart contents accurate {"project":"chromium"}
+2026-10-02T11:00:55.343Z [INFO] END   login is rejected for an empty password: passed (as expected) in 791 ms
+  ✓   8 [chromium] › tests/auth/login.spec.ts:63:9 › Login › login is rejected for an empty password @regression @negative (789ms)
+2026-10-02T11:00:55.357Z [INFO] START cart/cart.spec.ts > Shopping cart > cart contents survive a page reload {"project":"chromium"}
+2026-10-02T11:00:55.375Z [INFO] END   an anonymous user is redirected from a protected page to login: passed (as expected) in 664 ms
+  ✓  10 [chromium] › tests/auth/login.spec.ts:84:7 › Login › an anonymous user is redirected from a protected page to login @regression @negative (660ms)
+2026-10-02T11:00:55.388Z [INFO] START cart/cart.spec.ts > Shopping cart > continue shopping returns to the inventory with the cart intact {"project":"chromium"}
+2026-10-02T11:00:55.402Z [INFO] END   the login error message can be dismissed: passed (as expected) in 725 ms
+  ✓   9 [chromium] › tests/auth/login.spec.ts:75:7 › Login › the login error message can be dismissed @regression (723ms)
+2026-10-02T11:00:55.416Z [INFO] START cart/product-selection.spec.ts > Product selection > products can be sorted by price, low to high {"project":"chromium"}
+2026-10-02T11:00:55.562Z [INFO] END   adding a product updates the badge and the cart shows its details: passed (as expected) in 828 ms
+  ✓  12 [chromium] › tests/cart/cart.spec.ts:14:7 › Shopping cart › adding a product updates the badge and the cart shows its details @regression (826ms)
+2026-10-02T11:00:55.569Z [INFO] START cart/product-selection.spec.ts > Product selection > products can be sorted by price, high to low {"project":"chromium"}
+2026-10-02T11:00:55.705Z [INFO] END   removing products keeps the badge and cart contents accurate: passed (as expected) in 946 ms
+  ✓  13 [chromium] › tests/cart/cart.spec.ts:31:7 › Shopping cart › removing products keeps the badge and cart contents accurate @regression (944ms)
+2026-10-02T11:00:55.716Z [INFO] START cart/product-selection.spec.ts > Product selection > products can be sorted by name, A to Z {"project":"chromium"}
+2026-10-02T11:00:56.133Z [INFO] END   products can be sorted by price, low to high: passed (as expected) in 717 ms
+  ✓  16 [chromium] › tests/cart/product-selection.spec.ts:24:9 › Product selection › products can be sorted by price, low to high @regression (716ms)
+2026-10-02T11:00:56.144Z [INFO] START cart/product-selection.spec.ts > Product selection > products can be sorted by name, Z to A {"project":"chromium"}
+2026-10-02T11:00:56.251Z [INFO] END   products can be sorted by price, high to low: passed (as expected) in 682 ms
+  ✓  17 [chromium] › tests/cart/product-selection.spec.ts:24:9 › Product selection › products can be sorted by price, high to low @regression (681ms)
+2026-10-02T11:00:56.276Z [INFO] END   continue shopping returns to the inventory with the cart intact: passed (as expected) in 888 ms
+  ✓  15 [chromium] › tests/cart/cart.spec.ts:62:7 › Shopping cart › continue shopping returns to the inventory with the cart intact @regression (886ms)
+2026-10-02T11:00:56.327Z [INFO] END   cart contents survive a page reload: passed (as expected) in 970 ms
+  ✓  14 [chromium] › tests/cart/cart.spec.ts:51:7 › Shopping cart › cart contents survive a page reload @regression (968ms)
+2026-10-02T11:00:56.379Z [INFO] END   products can be sorted by name, A to Z: passed (as expected) in 663 ms
+  ✓  18 [chromium] › tests/cart/product-selection.spec.ts:34:9 › Product selection › products can be sorted by name, A to Z @regression (660ms)
+2026-10-02T11:00:56.401Z [INFO] START checkout/checkout.spec.ts > Checkout > customer information > checkout is blocked when the last name is missing {"project":"chromium"}
+2026-10-02T11:00:56.401Z [INFO] START checkout/checkout.spec.ts > Checkout > customer information > checkout is blocked when the first name is missing {"project":"chromium"}
+2026-10-02T11:00:56.411Z [INFO] END   logging out ends the session: passed (as expected) in 1685 ms
+  ✓  11 [chromium] › tests/auth/login.spec.ts:95:7 › Login › logging out ends the session @regression (1.7s)
+2026-10-02T11:00:56.451Z [INFO] START checkout/checkout.spec.ts > Checkout > customer information > checkout is blocked when the postal code is missing {"project":"chromium"}
+2026-10-02T11:00:56.513Z [INFO] START checkout/checkout.spec.ts > Checkout > customer information > submitting an empty form reports the first missing field {"project":"chromium"}
+2026-10-02T11:00:56.551Z [INFO] START checkout/checkout.spec.ts > Checkout > customer information > cancelling returns to the cart without losing items {"project":"chromium"}
+2026-10-02T11:00:56.874Z [INFO] END   products can be sorted by name, Z to A: passed (as expected) in 730 ms
+  ✓  19 [chromium] › tests/cart/product-selection.spec.ts:34:9 › Product selection › products can be sorted by name, Z to A @regression (729ms)
+2026-10-02T11:00:57.068Z [INFO] START checkout/checkout.spec.ts > Checkout > order totals > the overview shows correct totals for a single low-priced item {"project":"chromium"}
+2026-10-02T11:00:57.229Z [INFO] END   checkout is blocked when the last name is missing: passed (as expected) in 828 ms
+  ✓  20 [chromium] › tests/checkout/checkout.spec.ts:24:11 › Checkout › customer information › checkout is blocked when the last name is missing @regression @negative (826ms)
+2026-10-02T11:00:57.233Z [INFO] END   checkout is blocked when the first name is missing: passed (as expected) in 832 ms
+  ✓  21 [chromium] › tests/checkout/checkout.spec.ts:24:11 › Checkout › customer information › checkout is blocked when the first name is missing @regression @negative (830ms)
+2026-10-02T11:00:57.236Z [INFO] START checkout/checkout.spec.ts > Checkout > order totals > the overview shows correct totals for two items {"project":"chromium"}
+2026-10-02T11:00:57.239Z [INFO] START checkout/checkout.spec.ts > Checkout > order totals > the overview shows correct totals for three items including the most expensive product {"project":"chromium"}
+2026-10-02T11:00:57.249Z [INFO] END   checkout is blocked when the postal code is missing: passed (as expected) in 798 ms
+  ✓  22 [chromium] › tests/checkout/checkout.spec.ts:24:11 › Checkout › customer information › checkout is blocked when the postal code is missing @regression @negative (797ms)
+2026-10-02T11:00:57.258Z [INFO] START checkout/checkout.spec.ts > Checkout > known defects > KD-UI-01: checkout should not be possible with an empty cart {"project":"chromium"}
+2026-10-02T11:00:57.281Z [INFO] END   submitting an empty form reports the first missing field: passed (as expected) in 768 ms
+  ✓  23 [chromium] › tests/checkout/checkout.spec.ts:36:9 › Checkout › customer information › submitting an empty form reports the first missing field @regression @negative (767ms)
+2026-10-02T11:00:57.298Z [INFO] START checkout/checkout.spec.ts > Checkout > known defects > KD-UI-02: whitespace-only customer details should be rejected {"project":"chromium"}
+2026-10-02T11:00:57.407Z [INFO] END   cancelling returns to the cart without losing items: passed (as expected) in 856 ms
+  ✓  24 [chromium] › tests/checkout/checkout.spec.ts:47:9 › Checkout › customer information › cancelling returns to the cart without losing items @regression (855ms)
+2026-10-02T11:00:57.421Z [INFO] START e2e/purchase-flow.spec.ts > Purchase flow > a standard user can buy a product from login to order confirmation {"project":"chromium"}
+2026-10-02T11:00:57.953Z [INFO] END   the overview shows correct totals for a single low-priced item: passed (as expected) in 885 ms
+  ✓  25 [chromium] › tests/checkout/checkout.spec.ts:60:11 › Checkout › order totals › the overview shows correct totals for a single low-priced item @regression (885ms)
+2026-10-02T11:00:58.181Z [INFO] END   the overview shows correct totals for two items: passed (as expected) in 945 ms
+  ✓  26 [chromium] › tests/checkout/checkout.spec.ts:60:11 › Checkout › order totals › the overview shows correct totals for two items @regression (944ms)
+2026-10-02T11:00:58.229Z [INFO] END   the overview shows correct totals for three items including the most expensive product: passed (as expected) in 990 ms
+  ✓  27 [chromium] › tests/checkout/checkout.spec.ts:60:11 › Checkout › order totals › the overview shows correct totals for three items including the most expensive product @regression (989ms)
+2026-10-02T11:00:58.465Z [INFO] END   a standard user can buy a product from login to order confirmation: passed (as expected) in 1044 ms
+  ✓  30 [chromium] › tests/e2e/purchase-flow.spec.ts:12:7 › Purchase flow › a standard user can buy a product from login to order confirmation @e2e @smoke (1.0s)
+2026-10-02T11:01:02.994Z [INFO] END   KD-UI-01: checkout should not be possible with an empty cart: failed (as expected) in 5736 ms
+  ✘  28 [chromium] › tests/checkout/checkout.spec.ts:98:9 › Checkout › known defects › KD-UI-01: checkout should not be possible with an empty cart @regression @known-defect (5.7s)
+2026-10-02T11:01:03.273Z [INFO] END   KD-UI-02: whitespace-only customer details should be rejected: failed (as expected) in 5975 ms
+  ✘  29 [chromium] › tests/checkout/checkout.spec.ts:109:9 › Checkout › known defects › KD-UI-02: whitespace-only customer details should be rejected @regression @known-defect (6.0s)
+
+  30 passed (17.7s)
+
+To open last HTML report run:
+[36m[39m
+[36m  npx playwright show-report[39m
+[36m[39m
